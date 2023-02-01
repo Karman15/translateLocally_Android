@@ -1,5 +1,0 @@
-Remove "DBus" from line 96 and 97 of CMakeLists.txt
-Add "LIBRARY DESTINATION lib" under line 252 of CMakeLists.txt
-Add the following 2 lines to the CMake Kit configuration: 
-    -DBUILD_EXTERNAL_LIBARCHIVE:UNINITIALIZED=On
-    -DSSPLIT_USE_INTERNAL_PCRE2:UNINITIALIZED=On
