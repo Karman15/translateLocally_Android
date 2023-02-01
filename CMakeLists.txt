@@ -93,8 +93,8 @@ message("Building ${PROJECT_NAME}-${PROJECT_VERSION_STRING_FULL}")
 include(findLibarchiveCustom)
 find_package(Threads REQUIRED) # Cross-platform compatible way to get threads?
 
-find_package(QT NAMES Qt6 Qt5 COMPONENTS Core Gui PrintSupport Widgets LinguistTools Network DBus Svg REQUIRED)
-find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Core Gui PrintSupport Widgets LinguistTools Network DBus Svg REQUIRED)
+find_package(QT NAMES Qt6 Qt5 COMPONENTS Core Gui PrintSupport Widgets LinguistTools Network Svg REQUIRED)
+find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Core Gui PrintSupport Widgets LinguistTools Network Svg REQUIRED)
 
 # Marian submodule things
 # Documentation: https://cliutils.gitlab.io/modern-cmake/chapters/projects/submodule.html
@@ -236,7 +236,7 @@ set(LINK_LIBRARIES
     Qt${QT_VERSION_MAJOR}::PrintSupport
     Qt${QT_VERSION_MAJOR}::Widgets
     Qt${QT_VERSION_MAJOR}::Network
-    Qt${QT_VERSION_MAJOR}::DBus
+#    Qt${QT_VERSION_MAJOR}::DBus
     Qt${QT_VERSION_MAJOR}::Svg
     bergamot-translator
     ${CMAKE_THREAD_LIBS_INIT} # This should work on all platforms?
@@ -250,6 +250,7 @@ set_target_properties(translateLocally-bin PROPERTIES OUTPUT_NAME translateLocal
 if(UNIX)  # Add Linux and apple support for make install
   include(GNUInstallDirs)
   install(TARGETS translateLocally-bin
+          LIBRARY DESTINATION lib
           RUNTIME
          )
   install(FILES ${CMAKE_SOURCE_DIR}/dist/translateLocally.desktop DESTINATION share/applications)
@@ -330,7 +331,7 @@ else()
 endif()
 # Now echo the workaround
 if(${CMAKE_TARGET_ARCHITECTURE_CODE} MATCHES "arm")
-	message(WARNING "Building on ARM. You need to manually fix the broken build due to RUY using bad header names and QT's MOC. Please run:")
-	execute_process(COMMAND echo -e "${CMAKE_SOURCE_DIR}/cmake/fix_ruy_build.sh ${CMAKE_SOURCE_DIR} ${CMAKE_BINARY_DIR}")
-	message(WARNING "Before building the project")
+        message(WARNING "Building on ARM. You need to manually fix the broken build due to RUY using bad header names and QT's MOC. Please run:")
+        execute_process(COMMAND echo -e "${CMAKE_SOURCE_DIR}/cmake/fix_ruy_build.sh ${CMAKE_SOURCE_DIR} ${CMAKE_BINARY_DIR}")
+        message(WARNING "Before building the project")
 endif()
