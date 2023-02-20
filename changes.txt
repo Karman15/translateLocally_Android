@@ -3,3 +3,9 @@ Add "LIBRARY DESTINATION lib" under line 252 of CMakeLists.txt
 Add the following 2 lines to the CMake Kit configuration: 
     -DBUILD_EXTERNAL_LIBARCHIVE:UNINITIALIZED=On
     -DSSPLIT_USE_INTERNAL_PCRE2:UNINITIALIZED=On
+Copy libarchive.a library file from libraries_needed directory into the build directory: deps/libarchive-3.5.1/build/lib/
+Copy libiconv.so library file from libraries_needed directory to usr/local/ directory
+
+Comment out -Werror from marian-dev CMakeLists.txt file
+
+Run fix ruy command
