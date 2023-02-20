@@ -59,7 +59,7 @@ endif()
 if(MSVC)
     add_compile_options(${MSVC_BUILD_ARCH})
 else(MSVC)
-    add_compile_options(-march=${BUILD_ARCH})
+    add_compile_options(-march=armv7-a)
 endif(MSVC)
 
 #MSVC can't seem to pick up correct flags otherwise:
@@ -82,14 +82,14 @@ message("Building ${PROJECT_NAME}-${PROJECT_VERSION_STRING_FULL}")
 # Check https://doc.qt.io/qt/deployment-android.html for more information.
 # They need to be set before the find_package( ...) calls below.
 
-#if(ANDROID)
-#    set(ANDROID_PACKAGE_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/android")
-#    if (ANDROID_ABI STREQUAL "armeabi-v7a")
-#        set(ANDROID_EXTRA_LIBS
-#            ${CMAKE_CURRENT_SOURCE_DIR}/path/to/libcrypto.so
-#            ${CMAKE_CURRENT_SOURCE_DIR}/path/to/libssl.so)
-#    endif()
-#endif()
+if(ANDROID)
+    set(ANDROID_PACKAGE_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/android")
+    if (ANDROID_ABI STREQUAL "armeabi-v7a")
+        set(ANDROID_EXTRA_LIBS
+            ${CMAKE_CURRENT_SOURCE_DIR}/path/to/libcrypto.so
+            ${CMAKE_CURRENT_SOURCE_DIR}/path/to/libssl.so)
+    endif()
+endif()
 include(findLibarchiveCustom)
 find_package(Threads REQUIRED) # Cross-platform compatible way to get threads?
 
@@ -167,6 +167,7 @@ set(PROJECT_SOURCES
         src/settings/TranslatorSettingsDialog.h
         src/settings/TranslatorSettingsDialog.ui
         logo/logo_svg.h
+
         ${TS_FILES}
 )
 
