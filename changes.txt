@@ -11,3 +11,7 @@ Comment out -Werror from marian-dev CMakeLists.txt file
 Run fix ruy command
 
 To temporarily fix strict_fstream.hpp(stderror_r) error, I made the elif statement at line 30 true.
+
+To fix the vfmaq issue, comment out FMA from marian-dev CMakeLists.txt file (line 96)
+
+To temporarily fix float64x2_t issue, commenting out functions containing them from sse2neon.h file(line 203, 4359, 4515, 4610, 4671, 5989, 6510, 7407)
