@@ -81,14 +81,18 @@ message("Building ${PROJECT_NAME}-${PROJECT_VERSION_STRING_FULL}")
 # QtCreator supports the following variables for Android, which are identical to qmake Android variables.
 # Check https://doc.qt.io/qt/deployment-android.html for more information.
 # They need to be set before the find_package( ...) calls below.
-
 if(ANDROID)
     set(ANDROID_PACKAGE_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/android")
+    set(CMAKE_ANDROID_API 27)
     if (ANDROID_ABI STREQUAL "armeabi-v7a")
-        set(ANDROID_EXTRA_LIBS
-            ${CMAKE_CURRENT_SOURCE_DIR}/path/to/libcrypto.so
-            ${CMAKE_CURRENT_SOURCE_DIR}/path/to/libssl.so)
+
     endif()
+#    include(/home/vboxuser/android_openssl/CMakeLists.txt)
+#    set(ANDROID_EXTRA_LIBS
+#        /home/vboxuser/android_openssl/static/lib/arm/libcrypto.a
+#        /home/vboxuser/android_openssl/static/lib/arm/libssl.a
+#        /home/vboxuser/android_openssl/latest/arm/libcrypto_1_1.so
+#        /home/vboxuser/android_openssl/latest/arm/libssl_1_1.so
 endif()
 include(findLibarchiveCustom)
 find_package(Threads REQUIRED) # Cross-platform compatible way to get threads?
@@ -209,6 +213,14 @@ else()
         add_library(translateLocally-bin SHARED
             ${PROJECT_SOURCES}
         )
+        target_link_libraries(translateLocally-bin /home/vboxuser/libiconv.so)
+        set_property(TARGET translateLocally-bin PROPERTY QT_ANDROID_EXTRA_LIBS
+            /home/vboxuser/openssl/libssl.so
+            /home/vboxuser/openssl/libcrypto.so)
+#            /home/vboxuser/android_openssl/latest/arm/libcrypto_1_1.so
+#            /home/vboxuser/android_openssl/latest/arm/libssl_1_1.so
+#            /home/vboxuser/android_openssl/static/lib/arm/libcrypto.a
+#            /home/vboxuser/android_openssl/static/lib/arm/libssl.a)
     else()
         if(APPLE)
           add_executable(translateLocally MACOSX_BUNDLE

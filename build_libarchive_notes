@@ -1,0 +1,8 @@
+set_statvfs_transfer_size error: #define HAVE_STATFVS(line 1521) archive_read_disk_posix.c
+
+mbtowc error: util.c, line 62 included the following:
+//HACK for mbtowc
+#ifdef ANDROID
+int wctomb(char *s, wchar_t wc) { return wcrtomb(s,wc,NULL); }
+int mbtowc(wchar_t *pwc, const char *s, size_t n) { return mbrtowc(pwc, s, n, NULL); }
+#endif

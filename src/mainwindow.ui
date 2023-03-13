@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>500</width>
-    <height>450</height>
+    <width>377</width>
+    <height>301</height>
    </rect>
   </property>
   <property name="maximumSize">
@@ -57,11 +57,11 @@
             <height>0</height>
            </size>
           </property>
+          <property name="tabChangesFocus">
+           <bool>true</bool>
+          </property>
           <property name="placeholderText">
            <string>Enter text to be translated here...</string>
-          </property>
-          <property name="tabChangesFocus">
-            <bool>true</bool>
           </property>
          </widget>
          <widget class="QTextBrowser" name="outputBox"/>
@@ -186,8 +186,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>493</width>
-     <height>24</height>
+     <width>377</width>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuEdit">
@@ -266,20 +266,20 @@
    </property>
   </action>
   <action name="actionShowAlignment">
-    <property name="checkable">
-      <bool>true</bool>
-    </property>
-    <property name="text">
-      <string>Highlight translation</string>
-    </property>
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Highlight translation</string>
+   </property>
   </action>
   <action name="actionSyncScrolling">
-    <property name="checkable">
-      <bool>true</bool>
-    </property>
-    <property name="text">
-      <string>Sync Scrolling</string>
-    </property>
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Sync Scrolling</string>
+   </property>
   </action>
  </widget>
  <resources/>

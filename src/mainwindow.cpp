@@ -147,6 +147,8 @@ MainWindow::MainWindow(QWidget *parent)
         } else {
             ui_->statusbar->clearMessage();
         }
+        ui_->menubar->setNativeMenuBar(false);
+        ui_->menubar->setVisible(true);
     });
 
     connect(alignmentWorker_, &AlignmentWorker::ready, this, [&](QVector<WordAlignment> alignments, Translation::Direction direction) {

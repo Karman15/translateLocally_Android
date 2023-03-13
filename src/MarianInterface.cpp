@@ -68,6 +68,7 @@ MarianInterface::MarianInterface(QObject *parent)
     // indicates whether there are 0, 1, or 2 commands pending. If a command
     // is pending but both "queues" are empty, we'll treat that as a shutdown
     // request.
+    qDebug() << "-----------------Worker------------";
     worker_ = std::thread([&]() {
         std::unique_ptr<marian::bergamot::AsyncService> service;
         std::shared_ptr<marian::bergamot::TranslationModel> model;
@@ -75,6 +76,7 @@ MarianInterface::MarianInterface(QObject *parent)
         std::mutex internal_mutex;
 
         while (true) {
+            qDebug() << "----------------While loop-------------------";
             std::unique_ptr<ModelDescription> modelChange;
             std::unique_ptr<TranslationInput> input;
 
@@ -90,8 +92,10 @@ MarianInterface::MarianInterface(QObject *parent)
                 // Second check whether command is translating something.
                 // Note: else if because we only process one command per
                 // iteration otherwise commandIssued_ would go out of sync.
-                else if (pendingInput_)
+                else if (pendingInput_) {
+                    qDebug() << "-----------------------translating------------------------\n";
                     input = std::move(pendingInput_);
+                }
                 
                 // Command without any pending change -> poison.
                 else
@@ -101,7 +105,9 @@ MarianInterface::MarianInterface(QObject *parent)
             emit pendingChanged(true);
 
             try {
+                qDebug() << "-----------------------try------------------------\n";
                 if (modelChange) {
+                    qDebug() << "-----------------------model change-----------------------\n";
                     // Reconstruct the service because cpu_threads might have changed.
                     // @TODO: don't recreate Service if cpu_threads didn't change?
                     marian::bergamot::AsyncService::Config serviceConfig;
@@ -121,6 +127,7 @@ MarianInterface::MarianInterface(QObject *parent)
                     auto modelConfig = makeOptions(modelChange->config_file, modelChange->settings);
                     model = std::make_shared<marian::bergamot::TranslationModel>(modelConfig, modelChange->settings.cpu_threads);
                 } else if (input) {
+                    qDebug() << "-----------------------input-----------------------\n";
                     if (model) {
                         std::future<int> wordCount = std::async(countWords, input->text); // @TODO we're doing an "unnecessary" string copy here (necessary because we std::move input into service->translate)
 
@@ -128,8 +135,10 @@ MarianInterface::MarianInterface(QObject *parent)
 
                         // Measure the time it takes to queue and respond to the
                         // translation request
+                        qDebug() << "-----------------------before translation-----------------------\n";
                         auto start = std::chrono::steady_clock::now(); // Time the translation
                         service->translate(model, std::move(input->text), [&] (auto &&val) {
+                            qDebug() << "-----------------------after translation-----------------------\n";
                             auto end = std::chrono::steady_clock::now();
                             // Calculate translation speed in terms of words per second
                             double words = wordCount.get();
@@ -138,6 +147,7 @@ MarianInterface::MarianInterface(QObject *parent)
                             
                             std::unique_lock<std::mutex> lock(internal_mutex);
                             translation = Translation(std::move(val), translationSpeed);
+                            qDebug()  <<"-----------------"<<translation.translation()<<"\n";
                             cv_.notify_one();
                         }, input->options);
                         
